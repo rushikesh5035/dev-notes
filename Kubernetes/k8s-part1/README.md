@@ -197,7 +197,7 @@
 8. To access the cluster, we need to install `kubectl`:
 
    ```bash
-   https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Fx86-64%2Fstable%2Fbinary+download
+   https://kubernetes.io/docs/tasks/tools/#kubectl
    ```
 
    - Check if the `kubectl` is installed:
@@ -355,4 +355,5 @@ So, now our cluster is up and running. And its current state looks like this ðŸ‘
   <p align="center">
   <img width="400" alt="image" src="https://github.com/user-attachments/assets/b3f615a9-cfc7-404a-b444-0d26d41b2b8b" />
   </p>
+
 
