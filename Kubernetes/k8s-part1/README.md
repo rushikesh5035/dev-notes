@@ -18,7 +18,7 @@
 
   - Along with the above points, what if we can monitor the health of our containers, and if they are unhealthy, we can restart them automatically. This is also where container orchestration comes in.
  
-- ## Different Architectures for deploying before K8s
+## Different Architectures for deploying before K8s
   - Backend
       <p align="center">
         <img width="600" src="https://github.com/user-attachments/assets/fb016fa2-1fd1-4337-bf21-5a6b6f39547c">
@@ -33,7 +33,7 @@
         <img width="600" src="https://github.com/user-attachments/assets/7d7ae2aa-0c4b-4783-9d87-f3b1159a70d3">
       </p>
 
-- ## Deploying Architecture with K8s
+## Deploying Architecture with K8s
   Your frontend, backend are all pods in your kubernetes cluster
      <p align="center">
        <img width="600" src="https://github.com/user-attachments/assets/6a013a1f-8d72-4f2e-8f00-22eed783997c">
@@ -100,25 +100,27 @@
      <br>
 
 - In summary, hierarchy is like this 👇
-  <img width="692" height="507" alt="image" src="https://github.com/user-attachments/assets/60bf04f8-40d5-4f8a-9620-85a15960a209" />
+    <p align="center">
+      <img width="300" alt="image" src="https://github.com/user-attachments/assets/60bf04f8-40d5-4f8a-9620-85a15960a209" />
+    </p>
 
-- ## Creating a k8s cluster
+## Creating a k8s cluster
 
 - We can create a Kubernetes cluster in two ways:
 
-**Locally**:
-
-- Minikube
-- Kind (Recommended) -> 
-
-<br>
-
-**Cloud**:
-
-1. AWS K8s
-2. GKE (Google Kubernetes Engine)
-3. Digital Ocean
-4. vultr
+  **Locally**:
+  
+  - Minikube
+  - Kind (Recommended) -> 
+  
+  <br>
+  
+  **Cloud**:
+  
+  1. AWS K8s
+  2. GKE (Google Kubernetes Engine)
+  3. Digital Ocean
+  4. vultr
 
 ### Installing & Setting up a Cluster
 
@@ -288,8 +290,6 @@
 
 1.  Create a `pod-manifest.yml` file (or check the `/k8s/pod-manifest.yml`).
 
-    <br>
-
 2.  Write the below configuration in the `pod-manifest.yml` file:
 
     ```yaml
@@ -328,7 +328,7 @@
 
     </details>
 
-    <br>
+  
 
 3.  Create the pod using the manifest file:
 
@@ -342,7 +342,6 @@
       kubectl get pods
       ```
 
-    <br>
 
 4.  To delete the pod:
 
@@ -354,5 +353,6 @@
 
 So, now our cluster is up and running. And its current state looks like this 👇
   <p align="center">
-  <img width="582" height="458" alt="image" src="https://github.com/user-attachments/assets/b3f615a9-cfc7-404a-b444-0d26d41b2b8b" />
+  <img width="400" alt="image" src="https://github.com/user-attachments/assets/b3f615a9-cfc7-404a-b444-0d26d41b2b8b" />
   </p>
+
