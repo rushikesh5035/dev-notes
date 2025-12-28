@@ -96,6 +96,263 @@
     - **kube-proxy**: it is responsible for making sure that the network is properly set up. eg: if we have 2 pods, then it will make sure that they can communicate with each other.
 
     </details>
-      
 
-    
+     <br>
+
+- In summary, hierarchy is like this 👇
+  <img width="692" height="507" alt="image" src="https://github.com/user-attachments/assets/60bf04f8-40d5-4f8a-9620-85a15960a209" />
+
+- ## Creating a k8s cluster
+
+- We can create a Kubernetes cluster in two ways:
+
+**Locally**:
+
+- Minikube
+- Kind (Recommended) -> 
+
+<br>
+
+**Cloud**:
+
+1. AWS K8s
+2. GKE (Google Kubernetes Engine)
+3. Digital Ocean
+4. vultr
+
+### Installing & Setting up a Cluster
+
+1. Install Kind using instructions [here](https://kind.sigs.k8s.io/docs/user/quick-start/).
+
+<br>
+
+2. Create a single node cluster:
+
+   ```bash
+   kind create cluster --name 100x-k8s
+   ```
+   <br>
+
+3. Check the Docker containers running:
+
+   ```bash
+   docker ps
+   ```
+
+   Notice, there is a single container running (control plane). In our case, the _master node_ is acting as the _worker node_.
+   <br>
+
+4. To delete the cluster:
+
+   ```bash
+   kind delete cluster --name 100x-k8s
+   ```
+
+   <br>
+
+5. To setup a multi-node cluster, create a `clusters.yml` file (or check the `/k8s/clusters.yml`).
+   ```bash
+   kind: Cluster
+   apiVersion: kind.x-k8s.io/v1alpha4
+   nodes:
+   - role: control-plane
+   - role: worker
+   - role: worker
+   ```
+  <br>
+
+6. Go to the path where the `clusters.yml` file is located and run:
+
+   ```bash
+   kind create cluster --config clusters.yml --name 100x-k8s
+   ```
+7. Check the no. of nodes running (1 Master and 2 Worker Nodes).
+   <p align="center">
+       <img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/183546af-8c6d-4f3d-a100-e37940422ee2" />
+   </p>
+
+
+   _You will hit the `master` node port since it is the only node that is exposed to the outside world._
+
+  <br>
+
+- To check the cluster info (although, will give forbidden error):
+
+  ```bash
+  kubectl cluster-info --context kind-100x-k8s
+  ```
+
+- To find the credentials, run:
+
+  ```bash
+  cat ~/.kube/config
+  ```
+
+  > This is the file that contains the credentials to access the cluster.
+
+   <br>
+
+8. To access the cluster, we need to install `kubectl`:
+
+   ```bash
+   https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Fx86-64%2Fstable%2Fbinary+download
+   ```
+
+   - Check if the `kubectl` is installed:
+
+     ```bash
+     kubectl version
+     ```
+
+     <br>
+
+9. Now, we can access the cluster using `kubectl`:
+
+   ```bash
+   kubectl get nodes
+   ```
+
+   - To check the HTTP requests made by `kubectl`:
+
+     ```bash
+     kubectl get nodes -v=10
+     ```
+
+---
+
+## Creating a Pod
+
+- If you check the output of the below command, you will notice that there are no pods running:
+
+  ```bash
+  kubectl get pods
+  ```
+
+- Till now, we have created a cluster of 3 nodes.
+
+- Let's create a single container from an image inside a pod.
+
+<br>
+
+1.  Find a good image to run. In our case, we will go with `nginx`. Check `nginx` using docker first:
+
+    ```bash
+    docker run -p 3005:80 nginx
+    ```
+
+    <br>
+
+2.  Now, let's create a pod using `kubectl`. Press `ctrl + c` to stop the running container and run the below command to start `nginx` inside a pod:
+
+    ```bash
+    kubectl run nginx --image=nginx --port=80
+    ```
+
+    - Check the pods
+
+      ```bash
+      kubectl get pods
+      ```
+
+    - Check the logs
+
+      ```bash
+      kubectl logs nginx
+      ```
+
+    - Describe the pod
+
+      ```bash
+      kubectl describe pod nginx
+      ```
+
+      > Notice, the node where the pod is running. It will be running on one of the worker nodes.
+
+    <br>
+
+3.  To delete the pod:
+
+    ```bash
+    kubectl delete pod nginx
+    ```
+
+    <br>
+
+    **Notice**: we can't yet access the pod yet, we will be able to do that once we understand the concept of services.
+
+    <br>
+
+### Creating a Pod using Manifest File
+
+- Instead of running the `kubectl run` command over and over again, we can create a manifest file.
+
+1.  Create a `pod-manifest.yml` file (or check the `/k8s/pod-manifest.yml`).
+
+    <br>
+
+2.  Write the below configuration in the `pod-manifest.yml` file:
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+    ```
+
+    <details>
+    <summary> <b>Explaining above Configuration</b> </summary>
+
+    - `apiVersion`: The version of the Kubernetes API we want to use
+
+    - `kind`: The type of object we want to create. In this case, a Pod.
+
+    - `metadata`: Data about the Pod. In this case, the name of the Pod.
+
+    - `spec`: The specification of the Pod. This is where we define the containers that should run in the Pod.
+
+      - `containers`: A list of containers that should run in the Pod.
+
+        - `name`: The name of the container.
+
+        - `image`: The image to use for the container.
+
+        - `ports`: A list of ports that should be exposed by the container.
+
+          - `containerPort`: The port that should be exposed by the container.
+
+    </details>
+
+    <br>
+
+3.  Create the pod using the manifest file:
+
+    ```bash
+    kubectl apply -f pod-manifest.yml
+    ```
+
+    - Check the pods
+
+      ```bash
+      kubectl get pods
+      ```
+
+    <br>
+
+4.  To delete the pod:
+
+    ```bash
+    kubectl delete pod nginx
+    ```
+
+### Checkpoint
+
+So, now our cluster is up and running. And its current state looks like this 👇
+  <p align="center">
+  <img width="582" height="458" alt="image" src="https://github.com/user-attachments/assets/b3f615a9-cfc7-404a-b444-0d26d41b2b8b" />
+  </p>
