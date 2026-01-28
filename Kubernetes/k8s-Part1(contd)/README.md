@@ -13,7 +13,6 @@
 
 <img width="600" alt="Screenshot 2024-06-02 at 7 09 33 PM" src="https://github.com/its-id/100x-Cohort-Programs/assets/60315832/e8e32e4b-25b0-4049-890d-2f92baab1bf7">
 
-
 | Docker                                       | Kubernetes                                  |
 | -------------------------------------------- | ------------------------------------------- |
 | can run an image in a single container       | can run multiple containers in a single pod |
@@ -79,7 +78,6 @@
 - A `Deployment` is a higher-level concept that manages `Pods` and `ReplicaSets`.
 
 - It offers the following features:
-
   - **Rollouts and Rollbacks**: allows you to update the pod with new images and rollback to the previous version if something goes wrong.
 
   - **Scaling**: helps us scale the number of pods. Eg: starting and stopping the pods based on the load.
@@ -131,15 +129,11 @@
 
     <details>
     <summary>Explaining above configuration</summary>
-
    - `apiVersion`: The version of the Kubernetes API that we are using.
-
    - `kind`: The type of resource that we are creating. In this case, it is a `Deployment`.
-
    - `metadata`: The metadata of the deployment. contains the name of the deployment.
 
    - `spec`: specification of the deployment. contains the following fields:
-
      - `replicas`: The number of pods that we want to create.
 
      - `selector`: labels that the deployment uses to select the pods that it manages. tells how to find the pods that the deployment want to manage. In this case, the deployment selects the pods that matches the label `app: nginx`.
@@ -149,7 +143,6 @@
      - `metadata`: The metadata of the pods. It contains the labels that the deployment uses to select the pods.
 
      - `spec`: The specification of the pods. contains the following fields (Notice, this remains the same as the configuration of the pod):
-
        - `containers`: containers that the pods run. In this case, we have one container that runs the `nginx` image.
 
        - `name`: name of the container.
@@ -199,7 +192,6 @@
 - But, it was not actually the deployment that created the pods. It was the `ReplicaSet` that created the pods.
 
 - A `ReplicaSet` is a lower-level concept that manages the number of pods that are running.
-
   - also ensures that a specified number of pod replicas are running at any given time.
 
   <p align="center">
@@ -207,7 +199,7 @@
   </p>
 
 - `Series of events` -> User creates a deployment which creates a replicaset which creates pods
-If pods go down, replicaset controller  ensures to bring them back up
+If pods go down, replicaset controller ensures to bring them back up
 
   <p align="center">
     <img width="500" alt="image" src="https://github.com/user-attachments/assets/534087a1-4e0e-471e-9d2d-38debeb65cbf">
@@ -241,13 +233,14 @@ If pods go down, replicaset controller  ensures to bring them back up
    ```
 
 2. Go to `/k8s`. Create the ReplicaSet using the following command:
-
    - Apply the manifest
+
    ```bash
     kubectl apply -f rs.yml
    ```
 
    - Check the ReplicaSets:
+
      ```bash
      kubectl get replicaset
      ```
@@ -262,20 +255,21 @@ If pods go down, replicaset controller  ensures to bring them back up
       nginx-replicaset-q264f   1/1     Running   0          35s
       nginx-replicaset-vj42z   1/1     Running   0          35s
      ```
-   
-     
    - Try deleting a pod and check if it self heals
+
      ```bash
      kubectl delete pod nginx-replicaset-7zp2v
      kubectl get pods
      ```
-    
+
    - Try adding a pod with the app=nginx
+
      ```bash
      kubectl run nginx-pod --image=nginx --labels="app=nginx"
      ```
+
      - Ensure it gets terminated immedietely because the rs already has 3 pods
-     
+
 3. To delete the ReplicaSet, run the following command:
 
    ```bash
@@ -305,13 +299,12 @@ If pods go down, replicaset controller  ensures to bring them back up
 - Now, we by mistake push a new image to the deployment that has a bug.
 
 - Then, the deployment will **create a new replicaset** with the new image.
-
   - It will check if the new pods are running successfully.
 
   - If yes, it will **delete the old replicaset**.
 
   - If no, it will **rollback to the previous version**.
- 
+
 <br>
 
 ## Services
@@ -335,7 +328,6 @@ If pods go down, replicaset controller  ensures to bring them back up
 - It is a stable endpoint that exposes the pods to the outside world.
 
 - There are 4 types of services:
-
   - **ClusterIP**: Exposes the service on a cluster-internal IP. This type makes the service only reachable from within the cluster.
 
   - **NodePort**: Exposes the service on each Node's IP at a static port. This type makes the service reachable from outside the cluster using `<NodeIP>:<NodePort>`.
@@ -372,19 +364,14 @@ If pods go down, replicaset controller  ensures to bring them back up
 
     <details>
     <summary>Explaining configuration file</summary>
-
    - `apiVersion`: The version of the Kubernetes API that we are using.
-
    - `kind`: The type of resource that we are creating. In this case, it is a `Service`.
-
    - `metadata`: The metadata of the service. contains the name of the service.
 
    - `spec`: specification of the service. contains the following fields:
-
      - `selector`: labels that the service uses to select the pods that it exposes. tells how to find the pods that the service exposes. In this case, the service selects the pods that matches the label `app: nginx`.
 
      - `ports`: ports that the service exposes. contains the following fields:
-
        - `protocol`: protocol that the service uses. In this case, it is `TCP`.
 
        - `port`: port that the service listens on.
@@ -415,7 +402,7 @@ If pods go down, replicaset controller  ensures to bring them back up
 
 3. Note the `NodePort` of the service. Although, we will not be able to access the service using the `NodePort` as we are using `Kind`.
 
-    <img width="660" alt="Screenshot 2024-06-02 at 8 25 12 PM" src="https://github.com/its-id/100x-Cohort-Programs/assets/60315832/e8e9e631-9acf-427d-8c3d-86ee6eca31be">
+<img width="660" alt="Screenshot 2024-06-02 at 8 25 12 PM" src="https://github.com/its-id/100x-Cohort-Programs/assets/60315832/e8e9e631-9acf-427d-8c3d-86ee6eca31be">
 
 <br>
 
@@ -491,11 +478,11 @@ If pods go down, replicaset controller  ensures to bring them back up
 2. Click on `Kubernetes` Tab and then click on `Create Cluster`.
    <img width="1037" alt="Screenshot 2024-06-02 at 8 41 04 PM" src="https://github.com/its-id/100x-Cohort-Programs/assets/60315832/710b531a-01b1-49a9-9a16-edce45d97130">
    <br>
-4. After its created, download its configuration.
+3. After its created, download its configuration.
    <br>
-5. Replace your `~/.kube/config` file with the downloaded configuration file.
+4. Replace your `~/.kube/config` file with the downloaded configuration file.
    <br>
-6. Change the `type` of the service to `LoadBalancer` in the `k8s/service.yml` file:
+5. Change the `type` of the service to `LoadBalancer` in the `k8s/service.yml` file:
 
    ```yaml
    ---
@@ -504,7 +491,7 @@ If pods go down, replicaset controller  ensures to bring them back up
 
    <br>
 
-7. Create the deployment and the service again:
+6. Create the deployment and the service again:
 
    ```bash
    kubectl apply -f deployment-class.yml
@@ -513,7 +500,7 @@ If pods go down, replicaset controller  ensures to bring them back up
 
    <br>
 
-8. Check the services:
+7. Check the services:
 
    ```bash
    kubectl get services
@@ -521,4 +508,4 @@ If pods go down, replicaset controller  ensures to bring them back up
 
    <br>
 
-9. Access the service using the `LoadBalancer` IP.
+8. Access the service using the `LoadBalancer` IP.
