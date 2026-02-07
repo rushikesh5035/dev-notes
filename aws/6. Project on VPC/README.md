@@ -2,6 +2,22 @@
 
 ---
 
+#### AWS VPC + ASG + Bastion + Load Balancer Architecture
+
+<p align="center">
+   <img width="611" height="481" alt="vpc-example-private-subnets" src="https://github.com/user-attachments/assets/8cfe3701-73c5-4c97-b845-47fe93183b3d" />
+</p>
+
+### Architecture Description
+
+* This architecture shows a custom VPC with public and private subnets across two Availability Zones.
+* Public subnets contain the Bastion Host, Load Balancer, and NAT Gateway.
+* Private subnets contain EC2 instances managed by Auto Scaling Group.
+* Bastion Host is used to securely access private instances using SSH.
+* Application Load Balancer distributes traffic to private EC2 instances.
+* NAT Gateway allows private instances to access the internet for updates.
+* This setup provides high availability, security, and scalability.
+
 ## Step 1: VPC Creation
 
 1. To create VPC, go to AWS console and search **VPC**.
