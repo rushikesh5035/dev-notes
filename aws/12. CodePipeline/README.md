@@ -1,4 +1,4 @@
-# 🚀 AWS CodePipeline -- Automating Our Build & Deployment
+# 🚀 AWS CodePipeline -- Automating Our Build
 
 Use AWS CodePipeline to automate the build
 and deployment of our Dockerized Python application.
