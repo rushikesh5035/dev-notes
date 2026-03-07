@@ -1,388 +1,491 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Demo Express App</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Express App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --border: #1e1e2e;
-      --accent: #00ff88;
-      --accent2: #0088ff;
-      --text: #e8e8f0;
-      --muted: #5a5a7a;
-      --mono: 'JetBrains Mono', monospace;
-      --sans: 'Syne', sans-serif;
-    }
+      :root {
+        --bg: #0a0a0f;
+        --surface: #111118;
+        --border: #1e1e2e;
+        --accent: #00ff88;
+        --accent2: #0088ff;
+        --text: #e8e8f0;
+        --muted: #5a5a7a;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Syne", sans-serif;
+      }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
 
-    /* Grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
+      /* Grid background */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 2rem;
-      position: relative;
-      z-index: 1;
-    }
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem;
+        position: relative;
+        z-index: 1;
+      }
 
-    header {
-      padding: 3rem 0 2rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
+      header {
+        padding: 3rem 0 2rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
 
-    .logo {
-      width: 52px;
-      height: 52px;
-      background: var(--accent);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      flex-shrink: 0;
-      box-shadow: 0 0 30px rgba(0,255,136,0.3);
-    }
+      .logo {
+        width: 52px;
+        height: 52px;
+        background: var(--accent);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        flex-shrink: 0;
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      }
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
+      h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
 
-    h1 span { color: var(--accent); }
+      h1 span {
+        color: var(--accent);
+      }
 
-    .subtitle {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 0.3rem;
-    }
+      .subtitle {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 0.3rem;
+      }
 
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      background: rgba(0,255,136,0.06);
-      border: 1px solid rgba(0,255,136,0.15);
-      padding: 0.4rem 0.8rem;
-      border-radius: 999px;
-      margin-left: auto;
-    }
+      .status-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--accent);
+        background: rgba(0, 255, 136, 0.06);
+        border: 1px solid rgba(0, 255, 136, 0.15);
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        margin-left: auto;
+      }
 
-    .dot {
-      width: 7px; height: 7px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulse 1.6s infinite;
-    }
+      .dot {
+        width: 7px;
+        height: 7px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: pulse 1.6s infinite;
+      }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+        transition: border-color 0.2s;
+      }
 
-    .card:hover { border-color: var(--accent); }
-    .card.full { grid-column: 1 / -1; }
+      .card:hover {
+        border-color: var(--accent);
+      }
+      .card.full {
+        grid-column: 1 / -1;
+      }
 
-    .card-label {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+      .card-label {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
 
-    .card-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+      .card-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-    }
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
 
-    .info-item {
-      background: rgba(255,255,255,0.02);
-      border-radius: 8px;
-      padding: 0.7rem;
-    }
+      .info-item {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        padding: 0.7rem;
+      }
 
-    .info-key {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-bottom: 0.2rem;
-    }
+      .info-key {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: var(--muted);
+        margin-bottom: 0.2rem;
+      }
 
-    .info-val {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      color: var(--accent);
-      word-break: break-all;
-    }
+      .info-val {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--accent);
+        word-break: break-all;
+      }
 
-    .routes-list { display: flex; flex-direction: column; gap: 0.5rem; }
+      .routes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
 
-    .route-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.6rem 0.8rem;
-      background: rgba(255,255,255,0.02);
-      border-radius: 8px;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-    }
+      .route-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.6rem 0.8rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+      }
 
-    .method {
-      padding: 0.15rem 0.5rem;
-      border-radius: 5px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      min-width: 42px;
-      text-align: center;
-    }
+      .method {
+        padding: 0.15rem 0.5rem;
+        border-radius: 5px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        min-width: 42px;
+        text-align: center;
+      }
 
-    .GET  { background: rgba(0,255,136,0.12); color: var(--accent); }
-    .POST { background: rgba(0,136,255,0.12); color: var(--accent2); }
+      .GET {
+        background: rgba(0, 255, 136, 0.12);
+        color: var(--accent);
+      }
+      .POST {
+        background: rgba(0, 136, 255, 0.12);
+        color: var(--accent2);
+      }
 
-    .route-path { color: var(--text); }
-    .route-desc { color: var(--muted); margin-left: auto; font-size: 0.7rem; }
+      .route-path {
+        color: var(--text);
+      }
+      .route-desc {
+        color: var(--muted);
+        margin-left: auto;
+        font-size: 0.7rem;
+      }
 
-    .echo-section { margin-top: 1rem; }
+      .echo-section {
+        margin-top: 1rem;
+      }
 
-    textarea {
-      width: 100%;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      padding: 0.8rem;
-      resize: vertical;
-      min-height: 80px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
+      textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        padding: 0.8rem;
+        resize: vertical;
+        min-height: 80px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
 
-    textarea:focus { border-color: var(--accent2); }
+      textarea:focus {
+        border-color: var(--accent2);
+      }
 
-    button {
-      margin-top: 0.7rem;
-      background: var(--accent2);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.6rem 1.4rem;
-      font-family: var(--sans);
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
-    }
+      button {
+        margin-top: 0.7rem;
+        background: var(--accent2);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.4rem;
+        font-family: var(--sans);
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.1s;
+      }
 
-    button:hover { opacity: 0.85; }
-    button:active { transform: scale(0.97); }
+      button:hover {
+        opacity: 0.85;
+      }
+      button:active {
+        transform: scale(0.97);
+      }
 
-    .response-box {
-      margin-top: 0.8rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.8rem;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--accent);
-      white-space: pre-wrap;
-      min-height: 50px;
-      display: none;
-    }
+      .response-box {
+        margin-top: 0.8rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.8rem;
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        white-space: pre-wrap;
+        min-height: 50px;
+        display: none;
+      }
 
-    .response-box.show { display: block; }
+      .response-box.show {
+        display: block;
+      }
 
-    .loading { color: var(--muted); }
+      .loading {
+        color: var(--muted);
+      }
 
-    footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-align: center;
-    }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-align: center;
+      }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    .card { animation: fadeIn 0.4s ease both; }
-    .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.15s; }
-    .card:nth-child(4) { animation-delay: 0.2s; }
-  </style>
-</head>
-<body>
-<div class="container">
-  <header>
-    <div class="logo">⚡</div>
-    <div>
-      <h1>Express <span>Demo</span></h1>
-      <div class="subtitle">Node.js · Docker · AWS ECR ready</div>
-    </div>
-    <div class="status-bar">
-      <div class="dot"></div>
-      LIVE
-    </div>
-  </header>
+      .card {
+        animation: fadeIn 0.4s ease both;
+      }
+      .card:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .card:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .card:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .card:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo">⚡</div>
+        <div>
+          <h1>Express <span>Demo</span></h1>
+          <div class="subtitle">Node.js · Docker · AWS ECR ready</div>
+        </div>
+        <div class="status-bar">
+          <div class="dot"></div>
+          LIVE
+        </div>
+      </header>
 
-  <div class="grid">
-    <div class="card">
-      <div class="card-label">Server Info</div>
-      <div class="info-grid" id="info-grid">
-        <div class="info-item"><div class="info-key">status</div><div class="info-val">loading…</div></div>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Server Info</div>
+          <div class="info-grid" id="info-grid">
+            <div class="info-item">
+              <div class="info-key">status</div>
+              <div class="info-val">loading…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Health Check</div>
+          <div class="info-grid" id="health-grid">
+            <div class="info-item">
+              <div class="info-key">status</div>
+              <div class="info-val">loading…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card full">
+          <div class="card-label">API Routes</div>
+          <div class="routes-list" id="routes-list">
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 0.8rem;
+                color: var(--muted);
+              "
+            >
+              Loading…
+            </div>
+          </div>
+        </div>
+
+        <div class="card full echo-section">
+          <div class="card-label">POST /api/echo — Try it</div>
+          <textarea
+            id="echo-input"
+            placeholder='{ "message": "Hello from ECR!" }'
+          ></textarea>
+          <button onclick="sendEcho()">Send Request</button>
+          <div class="response-box" id="echo-response"></div>
+        </div>
       </div>
+
+      <footer>
+        demo-express-app · built for AWS ECR deployment · Node.js + Express
+      </footer>
     </div>
 
-    <div class="card">
-      <div class="card-label">Health Check</div>
-      <div class="info-grid" id="health-grid">
-        <div class="info-item"><div class="info-key">status</div><div class="info-val">loading…</div></div>
-      </div>
-    </div>
+    <script>
+      async function fetchJSON(url) {
+        const r = await fetch(url);
+        return r.json();
+      }
 
-    <div class="card full">
-      <div class="card-label">API Routes</div>
-      <div class="routes-list" id="routes-list">
-        <div style="font-family:var(--mono);font-size:0.8rem;color:var(--muted)">Loading…</div>
-      </div>
-    </div>
-
-    <div class="card full echo-section">
-      <div class="card-label">POST /api/echo — Try it</div>
-      <textarea id="echo-input" placeholder='{ "message": "Hello from ECR!" }'></textarea>
-      <button onclick="sendEcho()">Send Request</button>
-      <div class="response-box" id="echo-response"></div>
-    </div>
-  </div>
-
-  <footer>demo-express-app · built for AWS ECR deployment · Node.js + Express</footer>
-</div>
-
-<script>
-  async function fetchJSON(url) {
-    const r = await fetch(url);
-    return r.json();
-  }
-
-  function renderInfo(data) {
-    const keys = Object.entries(data).filter(([k]) => typeof data[k] !== 'object');
-    const obj_keys = Object.entries(data).filter(([k]) => typeof data[k] === 'object');
-    const all = [...keys, ...obj_keys.flatMap(([k, v]) => Object.entries(v).map(([sk, sv]) => [`${k}.${sk}`, sv]))];
-    return all.map(([k, v]) => `
+      function renderInfo(data) {
+        const keys = Object.entries(data).filter(
+          ([k]) => typeof data[k] !== "object",
+        );
+        const obj_keys = Object.entries(data).filter(
+          ([k]) => typeof data[k] === "object",
+        );
+        const all = [
+          ...keys,
+          ...obj_keys.flatMap(([k, v]) =>
+            Object.entries(v).map(([sk, sv]) => [`${k}.${sk}`, sv]),
+          ),
+        ];
+        return all
+          .map(
+            ([k, v]) => `
       <div class="info-item">
         <div class="info-key">${k}</div>
         <div class="info-val">${v}</div>
-      </div>`).join('');
-  }
+      </div>`,
+          )
+          .join("");
+      }
 
-  async function load() {
-    const [info, health, routes] = await Promise.all([
-      fetchJSON('/api/info'),
-      fetchJSON('/api/health'),
-      fetchJSON('/api/routes'),
-    ]);
+      async function load() {
+        const [info, health, routes] = await Promise.all([
+          fetchJSON("/api/info"),
+          fetchJSON("/api/health"),
+          fetchJSON("/api/routes"),
+        ]);
 
-    document.getElementById('info-grid').innerHTML = renderInfo(info);
-    document.getElementById('health-grid').innerHTML = renderInfo(health);
+        document.getElementById("info-grid").innerHTML = renderInfo(info);
+        document.getElementById("health-grid").innerHTML = renderInfo(health);
 
-    document.getElementById('routes-list').innerHTML = routes.routes.map(r => `
+        document.getElementById("routes-list").innerHTML = routes.routes
+          .map(
+            (r) => `
       <div class="route-item">
         <span class="method ${r.method}">${r.method}</span>
         <span class="route-path">${r.path}</span>
         <span class="route-desc">${r.description}</span>
-      </div>`).join('');
-  }
+      </div>`,
+          )
+          .join("");
+      }
 
-  async function sendEcho() {
-    const box = document.getElementById('echo-response');
-    const raw = document.getElementById('echo-input').value.trim() || '{}';
-    box.className = 'response-box show loading';
-    box.textContent = 'Sending…';
-    try {
-      const body = JSON.parse(raw);
-      const res = await fetch('/api/echo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      box.className = 'response-box show';
-      box.textContent = JSON.stringify(data, null, 2);
-    } catch (e) {
-      box.className = 'response-box show';
-      box.textContent = 'Error: ' + e.message;
-    }
-  }
+      async function sendEcho() {
+        const box = document.getElementById("echo-response");
+        const raw = document.getElementById("echo-input").value.trim() || "{}";
+        box.className = "response-box show loading";
+        box.textContent = "Sending…";
+        try {
+          const body = JSON.parse(raw);
+          const res = await fetch("/api/echo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          box.className = "response-box show";
+          box.textContent = JSON.stringify(data, null, 2);
+        } catch (e) {
+          box.className = "response-box show";
+          box.textContent = "Error: " + e.message;
+        }
+      }
 
-  load();
-</script>
-</body>
+      load();
+    </script>
+  </body>
 </html>
