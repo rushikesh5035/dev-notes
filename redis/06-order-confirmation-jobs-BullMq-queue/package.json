@@ -1,0 +1,21 @@
+{
+  "name": "06-order-confirmation-jobs-bullmq-queue",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "bullmq": "^5.76.10",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1"
+  }
+}
