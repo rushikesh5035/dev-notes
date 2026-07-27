@@ -1,0 +1,6 @@
+This is a new line of text.
+This is another line of text.
+Append operation taking place! 
+First line 
+second line 
+Third line 
